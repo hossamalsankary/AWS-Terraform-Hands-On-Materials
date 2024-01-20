@@ -10,7 +10,6 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 2.7.0"
     }
   }
 }
@@ -24,6 +23,12 @@ module "vpc" {
   source = "./modules/network"
   availability_zone = ["us-west-1b" , "us-west-1a"  ]
   subnetCidrBlock = ["10.0.0.0/24" , "10.0.1.0/24" , "10.0.2.0/24" , "10.0.3.0/24"]
+
+}
+
+module "comput" {
+  source = "./modules/computing"
+  privet_subnets = [ module.vpc.Privet_subnet_id_1 , module.vpc.Privet_subnet_id_2 ]
 
 }
 
