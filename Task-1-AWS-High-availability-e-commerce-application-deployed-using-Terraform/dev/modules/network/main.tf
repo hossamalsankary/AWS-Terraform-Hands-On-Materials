@@ -30,6 +30,7 @@ resource "aws_subnet" "public_10_0_0_0" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        =  var.subnetCidrBlock[0]
   availability_zone = var.availability_zone[0]
+  map_public_ip_on_launch = true  
   
   tags = {
     Name = local.publicSubnet1
@@ -40,6 +41,7 @@ resource "aws_subnet" "public_10_0_1_0" {
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        =  var.subnetCidrBlock[1]
  availability_zone = var.availability_zone[1]  
+ map_public_ip_on_launch = true  
   tags = {
     Name = local.publicSubnet2
   }
@@ -68,6 +70,7 @@ resource "aws_subnet" "privet_10_0_3_0" {
 # Create route tables for public subnets
 resource "aws_route_table" "route_table_public_10_0_0_0" {
   vpc_id = aws_vpc.main_vpc.id
+  
 
   route {
     cidr_block = var.allTraffiCblock

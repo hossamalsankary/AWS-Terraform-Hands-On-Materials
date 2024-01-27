@@ -12,14 +12,16 @@ resource "aws_launch_template" "launch_template" {
 
 resource "aws_elb" "web_elb" {
   name               = "Loadbalancer"
-  availability_zones = var.availability_zone
+  security_groups = [ var.web_security_group ]
+  subnets = var.public_subnets
+
   cross_zone_load_balancing   = true
   
 
  health_check {
     healthy_threshold = 2
     unhealthy_threshold = 4
-    timeout = 2
+    timeout = 10
     interval = 30
     target = "HTTP:80/"
   }
@@ -44,19 +46,22 @@ resource "aws_elb" "web_elb" {
 
 
 resource "aws_autoscaling_group" "asg" {
+  name = "awsautoscalinggroup"
   desired_capacity    = 3
   max_size            = 4
-  min_size            = 2
+  min_size            = 1
   health_check_type         = "ELB"
-  wait_for_elb_capacity = 5
 
-  load_balancers      = [aws_elb.web_elb.name]
+  load_balancers      = [aws_elb.web_elb.id]
   vpc_zone_identifier = [var.privet_subnets[0], var.privet_subnets[1]]
   depends_on = [ aws_launch_template.launch_template ]
   launch_template {
     id      = aws_launch_template.launch_template.id
     version = "$Latest"  # Corrected to use "latest" instead of "$Latest"
   }
+  #   lifecycle {
+  #   create_before_destroy = true
+  # }
 }
   
 #   lifecycle {

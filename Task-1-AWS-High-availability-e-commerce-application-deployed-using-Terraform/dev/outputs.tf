@@ -14,6 +14,6 @@ output "Privet_subnet_id_2" {
   value = module.vpc.Privet_subnet_id_2
 }
 
-output "aws_elb" {
-  value = module.comput.aws_elb
-}
+# output "aws_elb" {
+#   value = module.comput.aws_elb
+# }

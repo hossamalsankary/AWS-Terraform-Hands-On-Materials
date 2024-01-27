@@ -29,6 +29,8 @@ module "vpc" {
 module "comput" {
   source = "./modules/computing"
   privet_subnets = [ module.vpc.Privet_subnet_id_1 , module.vpc.Privet_subnet_id_2 ]
+  public_subnets = [ module.vpc.Puplic_subnet_id_1, module.vpc.Puplic_subnet_id_2 ]
+
   web_security_group = module.vpc.web_security_group
   availability_zone = var.availability_zone
 

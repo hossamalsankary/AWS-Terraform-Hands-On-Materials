@@ -7,6 +7,9 @@ variable "privet_subnets" {
   type = list(string)
 
 }
+variable "public_subnets" {
+  type = list(string)
+}
 
 variable "web_security_group" {
   type = string
