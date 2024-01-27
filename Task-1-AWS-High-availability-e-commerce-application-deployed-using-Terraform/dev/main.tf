@@ -21,8 +21,8 @@ provider "aws" {
 
 module "vpc" {
   source = "./modules/network"
-  availability_zone = ["us-west-1b" , "us-west-1a"  ]
-  subnetCidrBlock = ["10.0.0.0/24" , "10.0.1.0/24" , "10.0.2.0/24" , "10.0.3.0/24"]
+  availability_zone = var.availability_zone
+  subnetCidrBlock = var.subnetCidrBlock
 
 }
 
@@ -30,7 +30,7 @@ module "comput" {
   source = "./modules/computing"
   privet_subnets = [ module.vpc.Privet_subnet_id_1 , module.vpc.Privet_subnet_id_2 ]
   web_security_group = module.vpc.web_security_group
-  availability_zone = ["us-west-1b" , "us-west-1a"  ]
+  availability_zone = var.availability_zone
 
 }
 
