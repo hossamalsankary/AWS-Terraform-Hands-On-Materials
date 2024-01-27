@@ -8,4 +8,12 @@ variable "privet_subnets" {
 
 }
 
+variable "web_security_group" {
+  type = string
+  
+}
 
+variable "availability_zone" {
+  type = list(string)
+
+}

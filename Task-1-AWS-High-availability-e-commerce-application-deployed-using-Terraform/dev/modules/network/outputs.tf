@@ -17,3 +17,7 @@ output "Privet_subnet_id_1" {
 output "Privet_subnet_id_2" {
   value = aws_subnet.privet_10_0_3_0.id
 }
+
+output "web_security_group" {
+  value = aws_security_group.security_group.id
+}
