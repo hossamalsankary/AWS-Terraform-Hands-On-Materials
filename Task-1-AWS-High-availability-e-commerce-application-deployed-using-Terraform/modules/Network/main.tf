@@ -1,10 +1,10 @@
 locals {
   publicSubnet1 = "public_${var.subnetCidrBlock[0]}"
   publicSubnet2 = "public_${var.subnetCidrBlock[1]}"
-  privetSubnet1 = "public_${var.subnetCidrBlock[2]}"
-  privetSubnet2 = "public_${var.subnetCidrBlock[3]}"
+  privetSubnet1 = "privet_${var.subnetCidrBlock[2]}"
+  privetSubnet2 = "privet_${var.subnetCidrBlock[3]}"
 
-  
+
 }
 # Define the main VPC
 resource "aws_vpc" "main_vpc" {
@@ -27,21 +27,22 @@ resource "aws_internet_gateway" "igw" {
 
 # Create public subnets
 resource "aws_subnet" "public_10_0_0_0" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        =  var.subnetCidrBlock[0]
-  availability_zone = var.availability_zone[0]
-  map_public_ip_on_launch = true  
-  
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = var.subnetCidrBlock[0]
+  availability_zone       = var.availability_zone[0]
+  map_public_ip_on_launch = true
+
   tags = {
     Name = local.publicSubnet1
   }
 }
 
 resource "aws_subnet" "public_10_0_1_0" {
-  vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        =  var.subnetCidrBlock[1]
- availability_zone = var.availability_zone[1]  
- map_public_ip_on_launch = true  
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = var.subnetCidrBlock[1]
+  availability_zone       = var.availability_zone[1]
+  map_public_ip_on_launch = true
+
   tags = {
     Name = local.publicSubnet2
   }
@@ -50,8 +51,8 @@ resource "aws_subnet" "public_10_0_1_0" {
 # Create private subnets
 resource "aws_subnet" "privet_10_0_2_0" {
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        =  var.subnetCidrBlock[2]
-  availability_zone = var.availability_zone[0]  
+  cidr_block        = var.subnetCidrBlock[2]
+  availability_zone = var.availability_zone[0]
   tags = {
     Name = local.privetSubnet1
   }
@@ -59,8 +60,8 @@ resource "aws_subnet" "privet_10_0_2_0" {
 
 resource "aws_subnet" "privet_10_0_3_0" {
   vpc_id            = aws_vpc.main_vpc.id
-  cidr_block        =  var.subnetCidrBlock[3]
-  availability_zone = var.availability_zone[1]  
+  cidr_block        = var.subnetCidrBlock[3]
+  availability_zone = var.availability_zone[1]
   tags = {
     Name = local.privetSubnet2
   }
@@ -70,7 +71,7 @@ resource "aws_subnet" "privet_10_0_3_0" {
 # Create route tables for public subnets
 resource "aws_route_table" "route_table_public_10_0_0_0" {
   vpc_id = aws_vpc.main_vpc.id
-  
+
 
   route {
     cidr_block = var.allTraffiCblock
@@ -128,7 +129,7 @@ resource "aws_route_table" "Privet_route_1" {
 
   route {
 
-    cidr_block = var.allTraffiCblock
+    cidr_block     = var.allTraffiCblock
     nat_gateway_id = aws_nat_gateway.natgw1.id
   }
 }
@@ -138,19 +139,19 @@ resource "aws_route_table" "Privet_route_2" {
 
   route {
 
-    cidr_block = var.allTraffiCblock
+    cidr_block     = var.allTraffiCblock
     nat_gateway_id = aws_nat_gateway.natgw2.id
   }
 }
 
 
 resource "aws_route_table_association" "privet_10_0_2_0" {
-  subnet_id = aws_subnet.privet_10_0_2_0.id
+  subnet_id      = aws_subnet.privet_10_0_2_0.id
   route_table_id = aws_route_table.Privet_route_1.id
 }
 
 resource "aws_route_table_association" "privet_10_0_3_0" {
-  subnet_id = aws_subnet.privet_10_0_3_0.id
+  subnet_id      = aws_subnet.privet_10_0_3_0.id
   route_table_id = aws_route_table.Privet_route_2.id
 }
 
