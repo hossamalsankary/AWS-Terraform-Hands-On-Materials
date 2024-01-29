@@ -2,11 +2,13 @@
 resource "aws_launch_template" "launch_template" {
   name_prefix          = "launch_template"
   image_id             = "ami-0ce2cb35386fc22e9"
-  instance_type        = "t2.micro"
+  instance_type        = "t3.micro"
   
   user_data            = filebase64("${path.module}/app.sh")
   vpc_security_group_ids = [ var.web_security_group ]
-
+lifecycle {
+  create_before_destroy = true
+}
 
 }
 
@@ -59,15 +61,11 @@ resource "aws_autoscaling_group" "asg" {
     id      = aws_launch_template.launch_template.id
     version = "$Latest"  # Corrected to use "latest" instead of "$Latest"
   }
-  #   lifecycle {
-  #   create_before_destroy = true
-  # }
+
 }
   
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
+
+
 
 
 
